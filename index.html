@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZetaHost | Ultra-Fast Cloud & Server Hosting</title>
+
+  <!-- Dynamic SVG Favicon matching exact header brand icon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='zg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='48' height='48' rx='12' fill='%2304100c'/%3E%3Cpath d='M13 14h22v5L19 30h16v5H13v-5l16-11H13z' fill='url(%23zg)' stroke='%2334d399' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='35' cy='14' r='3' fill='%2334d399'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: {
+              950: '#030806',
+              900: '#06130e',
+              850: '#0b1d16',
+              800: '#11271f',
+              700: '#1a3a2f',
+              600: '#275243',
+            },
+            zeta: {
+              emerald: '#10b981',
+              neon: '#34d399',
+              teal: '#06b6d4',
+              mint: '#a7f3d0'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #030806;
+      color: #ecfdf5;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .display-font {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Ambient mesh grid */
+    .bg-topo {
+      background-image: radial-gradient(rgba(16, 185, 129, 0.08) 1.5px, transparent 1.5px), radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, transparent 1.5px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+    }
+
+    .glass-bar {
+      background: rgba(4, 16, 12, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(52, 211, 153, 0.12);
+    }
+
+    .emerald-card {
+      background: linear-gradient(145deg, rgba(11, 29, 22, 0.75) 0%, rgba(6, 19, 14, 0.9) 100%);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .emerald-card:hover {
+      border-color: rgba(52, 211, 153, 0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.18);
+    }
+
+    .glow-badge {
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.25) 0%, rgba(3, 8, 6, 0.8) 100%);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #030806;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1a3a2f;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #34d399;
+    }
+  </style>
+</head>
+<body class="bg-topo antialiased selection:bg-zeta-neon selection:text-black min-h-screen flex flex-col justify-between">
+
+  <header class="fixed top-0 left-0 right-0 z-40 glass-bar" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo (Identical to Favicon Geometry) -->
+      <a href="#/" class="flex items-center space-x-3 group" onclick="navigateRoute('#/')">
+        <div class="relative w-11 h-11 rounded-xl bg-obsidian-900 border border-zeta-neon/30 flex items-center justify-center p-2 shadow-lg shadow-zeta-emerald/10 group-hover:border-zeta-neon transition">
+          <svg class="w-full h-full" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="navZetaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#06b6d4" />
+              </linearGradient>
+            </defs>
+            <path d="M13 14h22v5L19 30h16v5H13v-5l16-11H13z" fill="url(#navZetaGrad)" stroke="#34d399" stroke-width="1.5" stroke-linejoin="round" />
+            <circle cx="35" cy="14" r="3" fill="#34d399" />
+          </svg>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-zeta-neon animate-pulse"></span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xl font-bold tracking-tight text-white display-font">
+              Zeta<span class="text-zeta-neon">Host</span>
+            </span>
+            <span class="text-[10px] font-mono uppercase bg-zeta-emerald/20 text-zeta-neon px-1.5 py-0.5 rounded border border-zeta-emerald/30">v4.8</span>
+          </div>
+          <span class="text-[11px] text-slate-400">High-Performance Cloud & VPS</span>
+        </div>
+      </a>
+
+      <!-- Ordered Header Navigation: Home, About Us, Services, FAQs, Contact Us -->
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-300">
+        <a href="#/home" onclick="handleNavClick(event, 'home')" class="hover:text-zeta-neon transition-colors">Home</a>
+        <a href="#/about" onclick="handleNavClick(event, 'about')" class="hover:text-zeta-neon transition-colors">About Us</a>
+        <a href="#/services" onclick="handleNavClick(event, 'services')" class="hover:text-zeta-neon transition-colors">Services</a>
+        <a href="#/faq" onclick="handleNavClick(event, 'faq')" class="hover:text-zeta-neon transition-colors">FAQs</a>
+        <a href="#/contact" onclick="handleNavClick(event, 'contact')" class="hover:text-zeta-neon transition-colors">Contact Us</a>
+      </nav>
+
+      <!-- Client Portal Login CTA -->
+      <div class="hidden md:flex items-center space-x-3">
+        <button onclick="openPortalModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-700 transition flex items-center gap-2">
+          <i class="fa-solid fa-lock text-zeta-neon text-xs"></i>
+          <span>Client Login</span>
+        </button>
+        <button onclick="handleNavClick(null, 'services')" class="px-4 py-2 rounded-xl text-xs font-bold text-black bg-zeta-neon hover:bg-emerald-300 transition shadow-md shadow-zeta-emerald/20 flex items-center gap-1.5">
+          <span>Explore Plans</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl text-slate-300 hover:text-white bg-obsidian-850 border border-obsidian-700" aria-label="Toggle Menu">
+        <i id="mobileMenuIcon" class="fa-solid fa-bars text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="hidden md:hidden border-b border-obsidian-800 bg-obsidian-950/98 px-6 py-5">
+      <div class="flex flex-col space-y-3.5 text-base font-semibold">
+        <a href="#/home" onclick="handleNavClick(event, 'home'); closeMobileMenu();" class="text-slate-200 hover:text-zeta-neon">Home</a>
+        <a href="#/about" onclick="handleNavClick(event, 'about'); closeMobileMenu();" class="text-slate-200 hover:text-zeta-neon">About Us</a>
+        <a href="#/services" onclick="handleNavClick(event, 'services'); closeMobileMenu();" class="text-slate-200 hover:text-zeta-neon">Services</a>
+        <a href="#/faq" onclick="handleNavClick(event, 'faq'); closeMobileMenu();" class="text-slate-200 hover:text-zeta-neon">FAQs</a>
+        <a href="#/contact" onclick="handleNavClick(event, 'contact'); closeMobileMenu();" class="text-slate-200 hover:text-zeta-neon">Contact Us</a>
+        <div class="pt-4 border-t border-obsidian-800 flex flex-col gap-2">
+          <button onclick="openPortalModal(); closeMobileMenu();" class="w-full py-2.5 text-xs font-bold text-slate-200 border border-obsidian-700 rounded-xl bg-obsidian-900">Client Login</button>
+          <button onclick="handleNavClick(null, 'services'); closeMobileMenu();" class="w-full py-2.5 text-xs font-bold text-black bg-zeta-neon rounded-xl">Explore Plans</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="app-viewport" class="flex-grow">
+    
+    <!-- ================= PAGE 1: MAIN HOMEPAGE ================= -->
+    <div id="page-home" class="page-view">
+      
+      <!-- HERO SECTION: Modern Split Layout (NO Domain Search) with Live Node Telemetry -->
+      <section id="home" class="pt-32 pb-20 md:pt-40 md:pb-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Hero Content -->
+            <div class="lg:col-span-7 space-y-6">
+              
+              <!-- 60% OFF Promotion Pill -->
+              <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-zeta-neon/30 bg-obsidian-900/80 text-xs font-semibold text-zeta-mint">
+                <span class="flex h-2 w-2 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-zeta-neon opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-zeta-emerald"></span>
+                </span>
+                <span>Special Promotion: All Hosting Plans Are Now 60% Cheaper!</span>
+              </div>
+
+              <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight display-font text-white">
+                Next-generation cloud hosting with <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-zeta-neon via-emerald-400 to-zeta-teal">
+                  zero server lag.
+                </span>
+              </h1>
+
+              <p class="text-slate-300 text-sm sm:text-base max-w-xl leading-relaxed">
+                Deploy lightning-fast websites and cloud applications on our enterprise NVMe architecture. Simple setup, daily automatic backups, and 99.99% uptime guaranteed.
+              </p>
+
+              <!-- Hero Action Buttons -->
+              <div class="flex flex-wrap gap-4 pt-2">
+                <button onclick="handleNavClick(null, 'services')" class="px-6 py-3 rounded-xl text-sm font-bold text-black bg-zeta-neon hover:bg-emerald-300 transition shadow-lg shadow-zeta-emerald/20 flex items-center gap-2">
+                  <span>View 60% Off Plans</span>
+                  <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+                <button onclick="handleNavClick(null, 'about')" class="px-6 py-3 rounded-xl text-sm font-semibold text-slate-200 hover:text-white bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-700 transition flex items-center gap-2">
+                  <i class="fa-solid fa-circle-info text-zeta-neon text-xs"></i>
+                  <span>How ZetaHost Works</span>
+                </button>
+              </div>
+
+              <!-- Quick Trust Badges -->
+              <div class="pt-6 grid grid-cols-3 gap-4 border-t border-obsidian-800 text-left">
+                <div>
+                  <div class="text-xl sm:text-2xl font-extrabold text-white display-font">99.99%</div>
+                  <div class="text-xs text-slate-400">Guaranteed Uptime</div>
+                </div>
+                <div>
+                  <div class="text-xl sm:text-2xl font-extrabold text-white display-font">&lt; 14ms</div>
+                  <div class="text-xs text-slate-400">Network Latency</div>
+                </div>
+                <div>
+                  <div class="text-xl sm:text-2xl font-extrabold text-white display-font">24/7/365</div>
+                  <div class="text-xs text-slate-400">Helpful Support</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Hero: Interactive Live Node Telemetry Card -->
+            <div class="lg:col-span-5">
+              <div class="emerald-card p-6 sm:p-7 rounded-3xl relative overflow-hidden shadow-2xl">
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-zeta-emerald/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="flex items-center justify-between pb-4 border-b border-obsidian-800">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full bg-zeta-neon animate-pulse"></span>
+                    <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">Node Status: Operational</span>
+                  </div>
+                  <span class="text-xs font-mono text-zeta-neon bg-zeta-neon/10 px-2.5 py-1 rounded-full border border-zeta-neon/20">US-Central Pod</span>
+                </div>
+
+                <!-- Interactive Server Spec Simulator -->
+                <div class="mt-5 space-y-4">
+                  <div>
+                    <div class="flex justify-between text-xs mb-1.5 font-medium">
+                      <span class="text-slate-300">Server Load Capacity</span>
+                      <span class="text-zeta-neon font-mono font-bold" id="loadMetric">19.4%</span>
+                    </div>
+                    <div class="w-full h-2 rounded-full bg-obsidian-950 overflow-hidden p-0.5 border border-obsidian-800">
+                      <div class="h-full bg-gradient-to-r from-zeta-emerald to-zeta-teal rounded-full transition-all duration-700" style="width: 22%"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs mb-1.5 font-medium">
+                      <span class="text-slate-300">Global Response Time</span>
+                      <span class="text-zeta-neon font-mono font-bold">11 ms</span>
+                    </div>
+                    <div class="w-full h-2 rounded-full bg-obsidian-950 overflow-hidden p-0.5 border border-obsidian-800">
+                      <div class="h-full bg-gradient-to-r from-zeta-emerald to-emerald-400 rounded-full transition-all duration-700" style="width: 14%"></div>
+                    </div>
+                  </div>
+
+                  <!-- Quick Hardware Highlights -->
+                  <div class="grid grid-cols-2 gap-3 pt-3">
+                    <div class="p-3 rounded-xl bg-obsidian-950/80 border border-obsidian-800 text-xs">
+                      <p class="text-slate-400">Processing Units</p>
+                      <p class="font-bold text-white mt-0.5 font-mono">AMD EPYC™ Gen4</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-obsidian-950/80 border border-obsidian-800 text-xs">
+                      <p class="text-slate-400">Drive Throughput</p>
+                      <p class="font-bold text-white mt-0.5 font-mono">PCIe 4.0 NVMe</p>
+                    </div>
+                  </div>
+
+                  <!-- Resource Slider Test -->
+                  <div class="p-4 rounded-2xl bg-obsidian-900 border border-obsidian-750 space-y-2">
+                    <div class="flex justify-between items-center text-xs">
+                      <span class="text-slate-300 font-semibold">Simulate Cloud Scale</span>
+                      <span class="text-zeta-neon font-mono font-bold" id="sliderValLabel">2 vCPU / 4 GB RAM</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="1" 
+                      max="4" 
+                      value="2" 
+                      id="resourceRange" 
+                      oninput="updateResourceDemo(this.value)" 
+                      class="w-full accent-emerald-400 cursor-pointer"
+                    />
+                    <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                      <span>Basic</span>
+                      <span>Growth</span>
+                      <span>Heavy Pro</span>
+                      <span>Ultra Cluster</span>
+                    </div>
+                  </div>
+
+                  <button onclick="orderCustomSpec()" class="w-full py-2.5 rounded-xl text-xs font-bold text-black bg-zeta-neon hover:bg-emerald-300 transition">
+                    Configure Custom Node
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECTION 2: ABOUT US (Placed strictly after Home) ================= -->
+      <section id="about" class="py-20 border-t border-obsidian-800/80 bg-obsidian-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="max-w-3xl mx-auto text-center mb-14">
+            <span class="text-zeta-neon text-xs font-bold tracking-wider uppercase bg-zeta-emerald/10 px-3 py-1 rounded-full border border-zeta-emerald/20">
+              About Us
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-3 display-font">
+              Web Hosting Built with Honesty and Pure Speed
+            </h2>
+            <p class="text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              At ZetaHost, we believe reliable web infrastructure shouldn't be complicated or overpriced. We run modern servers, provide friendly support, and pass savings directly to you with no hidden fees.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="emerald-card p-6 sm:p-7 rounded-2xl">
+              <div class="w-12 h-12 rounded-xl bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-xl mb-4 border border-zeta-emerald/20">
+                <i class="fa-solid fa-microchip"></i>
+              </div>
+              <h3 class="text-base font-bold text-white mb-2 display-font">Next-Gen NVMe Storage</h3>
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                We use high-speed enterprise NVMe solid-state storage that reads and writes up to 7x faster than standard SSD web hosts.
+              </p>
+            </div>
+
+            <div class="emerald-card p-6 sm:p-7 rounded-2xl">
+              <div class="w-12 h-12 rounded-xl bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-xl mb-4 border border-zeta-emerald/20">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <h3 class="text-base font-bold text-white mb-2 display-font">Always Protected</h3>
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Automated DDoS shielding, real-time firewalls, and free SSL certificates protect your site from threats 24 hours a day.
+              </p>
+            </div>
+
+            <div class="emerald-card p-6 sm:p-7 rounded-2xl">
+              <div class="w-12 h-12 rounded-xl bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-xl mb-4 border border-zeta-emerald/20">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <h3 class="text-base font-bold text-white mb-2 display-font">Free Website Transfers</h3>
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Already hosting somewhere else? Our team will migrate your websites, databases, and emails over for free with zero downtime.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Quick Fact Strip -->
+          <div class="mt-10 p-6 rounded-2xl bg-obsidian-950 border border-obsidian-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-zeta-neon/10 text-zeta-neon flex items-center justify-center">
+                <i class="fa-solid fa-check text-sm"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">30-Day Money-Back Guarantee Included</h4>
+                <p class="text-xs text-slate-400">Try our hosting risk-free. If you're not satisfied, get a full refund within 30 days.</p>
+              </div>
+            </div>
+            <a href="#/refund-policy" onclick="navigateRoute('#/refund-policy')" class="text-xs font-semibold text-zeta-neon hover:underline whitespace-nowrap">
+              Read Refund Terms &rarr;
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECTION 3: SERVICES (All 6 Hosting Services - 60% Cheaper) ================= -->
+      <section id="services" class="py-20 border-t border-obsidian-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-zeta-neon text-xs font-bold tracking-wider uppercase bg-zeta-emerald/15 px-3.5 py-1 rounded-full border border-zeta-emerald/30">
+              60% Cheaper Prices Applied
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-3 display-font">
+              Pick Your Ideal Cloud Hosting Plan
+            </h2>
+            <p class="text-slate-400 text-sm mt-2">
+              Every plan comes with free SSL security, daily backups, DDoS protection, and instant deployment.
+            </p>
+
+            <!-- Monthly / Annual Toggle Switch -->
+            <div class="mt-7 inline-flex items-center bg-obsidian-950 border border-obsidian-800 p-1.5 rounded-2xl shadow-inner">
+              <button id="billingMonthly" onclick="setZetaBilling('monthly')" class="px-5 py-2 rounded-xl text-xs font-bold bg-zeta-neon text-black transition shadow">
+                Monthly Billing
+              </button>
+              <button id="billingAnnual" onclick="setZetaBilling('annual')" class="px-5 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition flex items-center gap-2">
+                <span>Annual Billing</span>
+                <span class="bg-zeta-emerald/20 text-zeta-neon text-[10px] px-2 py-0.5 rounded-full font-extrabold border border-zeta-neon/30">Save Extra 20%</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- All 6 Distinct Hosting Types Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Plan 1: Static Edge CDN Hosting -->
+            <div class="emerald-card rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-[10px] font-bold text-zeta-neon uppercase tracking-wider">Fast & Minimal</span>
+                    <h3 class="text-base font-bold text-white display-font">1. Static Edge Hosting</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">For landing pages, documentation, & jamstack</p>
+                  </div>
+                  <i class="fa-solid fa-bolt text-zeta-neon text-xl"></i>
+                </div>
+
+                <div class="my-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 line-through">$2.80</span>
+                    <span class="text-xs font-bold text-zeta-neon bg-zeta-neon/10 px-2 py-0.5 rounded border border-zeta-neon/20">60% OFF</span>
+                  </div>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white display-font zeta-cost" data-mo="1.12" data-yr="0.89">$1.12</span>
+                    <span class="text-xs text-slate-400">/ month</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 zeta-hint">Billed every month</span>
+                </div>
+
+                <ul class="space-y-2 border-t border-obsidian-800 pt-4 text-xs text-slate-300">
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Global Edge CDN across 40+ PoPs</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>25 GB High-Speed NVMe Storage</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Automatic Free SSL Padlock</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Instant Git Push Deployments</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Unlimited Free Bandwidth</span></li>
+                </ul>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-obsidian-800">
+                <button onclick="orderZetaPlan('Static Edge Hosting', 1.12)" class="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 transition">
+                  Choose Edge Plan
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan 2: High-Frequency Node VPS (Most Popular) -->
+            <div class="emerald-card rounded-2xl p-6 flex flex-col justify-between border-2 border-zeta-neon/60 relative">
+              <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-zeta-neon text-black text-[10px] font-extrabold uppercase px-3.5 py-0.5 rounded-full shadow-md">
+                Top Rated Choice
+              </span>
+              <div>
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-[10px] font-bold text-zeta-neon uppercase tracking-wider">Dedicated Compute</span>
+                    <h3 class="text-base font-bold text-white display-font">2. High-Frequency Node VPS</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Fast virtual servers for web apps and databases</p>
+                  </div>
+                  <i class="fa-solid fa-server text-zeta-neon text-xl"></i>
+                </div>
+
+                <div class="my-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 line-through">$9.50</span>
+                    <span class="text-xs font-bold text-zeta-neon bg-zeta-neon/10 px-2 py-0.5 rounded border border-zeta-neon/20">60% OFF</span>
+                  </div>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white display-font zeta-cost" data-mo="3.80" data-yr="3.04">$3.80</span>
+                    <span class="text-xs text-slate-400">/ month</span>
+                  </div>
+                  <span class="text-[11px] text-zeta-neon zeta-hint">Billed every month</span>
+                </div>
+
+                <ul class="space-y-2 border-t border-obsidian-800 pt-4 text-xs text-slate-300">
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>2 vCPU High-Frequency Cores (3.8GHz+)</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>4 GB Dedicated RAM</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>80 GB Enterprise NVMe Array</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Full Root SSH & API Control</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Dedicated Static IPv4 + IPv6</span></li>
+                </ul>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-obsidian-800">
+                <button onclick="orderZetaPlan('High-Frequency Node VPS', 3.80)" class="w-full py-2.5 rounded-xl text-xs font-bold text-black bg-zeta-neon hover:bg-emerald-300 transition shadow-md shadow-zeta-emerald/20">
+                  Deploy VPS Node
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan 3: GPU AI & Inference Hosting -->
+            <div class="emerald-card rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-[10px] font-bold text-zeta-teal uppercase tracking-wider">High Compute</span>
+                    <h3 class="text-base font-bold text-white display-font">3. GPU AI Hosting</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Hardware-accelerated AI models and tasks</p>
+                  </div>
+                  <i class="fa-solid fa-brain text-zeta-teal text-xl"></i>
+                </div>
+
+                <div class="my-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 line-through">$59.00</span>
+                    <span class="text-xs font-bold text-zeta-neon bg-zeta-neon/10 px-2 py-0.5 rounded border border-zeta-neon/20">60% OFF</span>
+                  </div>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white display-font zeta-cost" data-mo="23.60" data-yr="18.88">$23.60</span>
+                    <span class="text-xs text-slate-400">/ month</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 zeta-hint">Billed every month</span>
+                </div>
+
+                <ul class="space-y-2 border-t border-obsidian-800 pt-4 text-xs text-slate-300">
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Dedicated Tensor GPU Slice</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>16 GB High-Bandwidth VRAM</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Pre-installed PyTorch & CUDA 12</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>250 GB Gen4 NVMe Dataset Cache</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Low-latency REST API Endpoints</span></li>
+                </ul>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-obsidian-800">
+                <button onclick="orderZetaPlan('GPU AI Hosting', 23.60)" class="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 transition">
+                  Choose GPU Plan
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan 4: Managed E-Commerce & WooCommerce Hosting -->
+            <div class="emerald-card rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Online Stores</span>
+                    <h3 class="text-base font-bold text-white display-font">4. E-Commerce Cloud</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Optimized for WooCommerce, Magento & Shopify apps</p>
+                  </div>
+                  <i class="fa-solid fa-cart-shopping text-emerald-400 text-xl"></i>
+                </div>
+
+                <div class="my-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 line-through">$7.50</span>
+                    <span class="text-xs font-bold text-zeta-neon bg-zeta-neon/10 px-2 py-0.5 rounded border border-zeta-neon/20">60% OFF</span>
+                  </div>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white display-font zeta-cost" data-mo="3.00" data-yr="2.40">$3.00</span>
+                    <span class="text-xs text-slate-400">/ month</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 zeta-hint">Billed every month</span>
+                </div>
+
+                <ul class="space-y-2 border-t border-obsidian-800 pt-4 text-xs text-slate-300">
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Redis Object Cache Pre-configured</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Optimized MySQL Database Engine</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Daily Automated Offsite Backups</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>PCI-DSS Compliance Level 1 Ready</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>1-Click Safe Staging Sandbox</span></li>
+                </ul>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-obsidian-800">
+                <button onclick="orderZetaPlan('E-Commerce Cloud Hosting', 3.00)" class="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 transition">
+                  Choose Commerce
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan 5: Microservices Cloud Pods -->
+            <div class="emerald-card rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-[10px] font-bold text-cyan-300 uppercase tracking-wider">Containers</span>
+                    <h3 class="text-base font-bold text-white display-font">5. Cloud Container Pods</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Deploy Docker, Node.js, Go, or Python containers</p>
+                  </div>
+                  <i class="fa-solid fa-cubes text-cyan-300 text-xl"></i>
+                </div>
+
+                <div class="my-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 line-through">$14.00</span>
+                    <span class="text-xs font-bold text-zeta-neon bg-zeta-neon/10 px-2 py-0.5 rounded border border-zeta-neon/20">60% OFF</span>
+                  </div>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white display-font zeta-cost" data-mo="5.60" data-yr="4.48">$5.60</span>
+                    <span class="text-xs text-slate-400">/ month</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 zeta-hint">Billed every month</span>
+                </div>
+
+                <ul class="space-y-2 border-t border-obsidian-800 pt-4 text-xs text-slate-300">
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Automated Zero-Downtime Rolling Deploys</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Built-in Load Balancers & Ingress</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Auto-Scales on Traffic Spikes</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Integrated Logs and Metric Dashboard</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Native Docker Compose Support</span></li>
+                </ul>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-obsidian-800">
+                <button onclick="orderZetaPlan('Cloud Container Pods', 5.60)" class="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 transition">
+                  Choose Pods
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan 6: Storage & Backup Vault Hosting -->
+            <div class="emerald-card rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">Safe Storage</span>
+                    <h3 class="text-base font-bold text-white display-font">6. Cloud Vault & Backup</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">S3-compatible encrypted object storage</p>
+                  </div>
+                  <i class="fa-solid fa-vault text-emerald-300 text-xl"></i>
+                </div>
+
+                <div class="my-4">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 line-through">$6.00</span>
+                    <span class="text-xs font-bold text-zeta-neon bg-zeta-neon/10 px-2 py-0.5 rounded border border-zeta-neon/20">60% OFF</span>
+                  </div>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white display-font zeta-cost" data-mo="2.40" data-yr="1.92">$2.40</span>
+                    <span class="text-xs text-slate-400">/ month</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 zeta-hint">Billed every month</span>
+                </div>
+
+                <ul class="space-y-2 border-t border-obsidian-800 pt-4 text-xs text-slate-300">
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>500 GB Redundant Object Storage</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Full S3 API Protocol Compatibility</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Client-Side AES-256 Encryption</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Zero Ingress or Egress Transfer Penalties</span></li>
+                  <li class="flex items-center gap-2"><i class="fa-solid fa-check text-zeta-neon"></i> <span>Instant Snapshot Clones</span></li>
+                </ul>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-obsidian-800">
+                <button onclick="orderZetaPlan('Cloud Vault Storage', 2.40)" class="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 transition">
+                  Choose Vault Plan
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECTION 4: FAQS ================= -->
+      <section id="faq" class="py-20 border-t border-obsidian-800/80 bg-obsidian-900/30">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center mb-12">
+            <span class="text-zeta-neon text-xs font-bold uppercase tracking-wider bg-zeta-emerald/10 px-3 py-1 rounded-full border border-zeta-emerald/20">
+              Clear Questions & Answers
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-3 display-font">
+              Frequently Asked Questions
+            </h2>
+            <p class="text-slate-400 text-sm mt-2">
+              Everything you need to know about our hosting plans in clear, honest language.
+            </p>
+          </div>
+
+          <div class="space-y-3.5" id="faqAccordion">
+
+            <div class="emerald-card rounded-2xl overflow-hidden">
+              <button onclick="toggleZetaFaq(this)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-white text-sm hover:text-zeta-neon transition">
+                <span>How fast does my server activate after ordering?</span>
+                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+              </button>
+              <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-400 leading-relaxed border-t border-obsidian-800/80 pt-3">
+                All cloud instances and web hosting accounts are activated immediately upon checkout. You will receive your dashboard credentials and root access by email in less than 60 seconds.
+              </div>
+            </div>
+
+            <div class="emerald-card rounded-2xl overflow-hidden">
+              <button onclick="toggleZetaFaq(this)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-white text-sm hover:text-zeta-neon transition">
+                <span>Can I upgrade or downgrade my plan at any time?</span>
+                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+              </button>
+              <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-400 leading-relaxed border-t border-obsidian-800/80 pt-3">
+                Yes, absolutely. You can scale your CPU, RAM, and NVMe disk space with a single click in your client portal. Upgrades are applied seamlessly with no data loss or server migration headaches.
+              </div>
+            </div>
+
+            <div class="emerald-card rounded-2xl overflow-hidden">
+              <button onclick="toggleZetaFaq(this)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-white text-sm hover:text-zeta-neon transition">
+                <span>How does the 30-day refund policy work?</span>
+                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+              </button>
+              <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-400 leading-relaxed border-t border-obsidian-800/80 pt-3">
+                If you aren't completely thrilled with your hosting performance within your first 30 days, just drop an email to zetacloud.ops@gmail.com. We will immediately issue a 100% full refund back to your payment card.
+              </div>
+            </div>
+
+            <div class="emerald-card rounded-2xl overflow-hidden">
+              <button onclick="toggleZetaFaq(this)" class="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-white text-sm hover:text-zeta-neon transition">
+                <span>Do you offer free automated SSL certificates?</span>
+                <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+              </button>
+              <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-400 leading-relaxed border-t border-obsidian-800/80 pt-3">
+                Yes. Every website and domain hosted on ZetaHost receives free automatic SSL certificates that renew on their own every 90 days, ensuring your site stays secure without manual work.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECTION 5: CONTACT US (Address & Email only, No phone, No HQ tags) ================= -->
+      <section id="contact" class="py-20 border-t border-obsidian-800/80 bg-obsidian-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            
+            <!-- Left Info: Email & Clean Address Only -->
+            <div class="lg:col-span-5 space-y-6">
+              <div>
+                <span class="text-zeta-neon text-xs font-bold uppercase tracking-wider bg-zeta-emerald/10 px-3 py-1 rounded-full border border-zeta-emerald/20">
+                  Direct Inquiries
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-3 display-font">
+                  Contact Us
+                </h2>
+                <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                  Have questions regarding server setup, custom quotas, or billing? Reach out to our team directly.
+                </p>
+              </div>
+
+              <div class="space-y-4 pt-1">
+                
+                <!-- Email Only -->
+                <div class="emerald-card p-4 rounded-xl flex items-center gap-4">
+                  <div class="w-11 h-11 rounded-lg bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-lg flex-shrink-0 border border-zeta-emerald/20">
+                    <i class="fa-solid fa-envelope"></i>
+                  </div>
+                  <div>
+                    <p class="text-[11px] text-slate-400 font-medium">Direct Email</p>
+                    <a href="mailto:zetacloud.ops@gmail.com" class="text-sm font-bold text-white hover:text-zeta-neon transition font-mono">
+                      zetacloud.ops@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Clean Office Address Only -->
+                <div class="emerald-card p-4 rounded-xl flex items-start gap-4">
+                  <div class="w-11 h-11 rounded-lg bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-lg flex-shrink-0 mt-0.5 border border-zeta-emerald/20">
+                    <i class="fa-solid fa-location-dot"></i>
+                  </div>
+                  <div>
+                    <p class="text-[11px] text-slate-400 font-medium">Office Location</p>
+                    <p class="text-xs sm:text-sm font-semibold text-white mt-0.5">
+                      500 Terry Francois Blvd, Suite 350
+                    </p>
+                    <p class="text-xs text-slate-400">
+                      San Francisco, CA 94158, United States
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="lg:col-span-7">
+              <div class="emerald-card p-6 sm:p-8 rounded-2xl border border-obsidian-750">
+                <h3 class="text-lg font-bold text-white mb-1 display-font">Send a Message</h3>
+                <p class="text-xs text-slate-400 mb-5">
+                  Inquiries are delivered directly to <span class="font-mono text-zeta-neon">zetacloud.ops@gmail.com</span>
+                </p>
+
+                <form id="zetaContactForm" onsubmit="handleZetaContactSubmit(event)" class="space-y-4">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-300 mb-1">Your Name</label>
+                      <input type="text" id="zName" required placeholder="Alex Turner" class="w-full bg-obsidian-900 border border-obsidian-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-zeta-neon">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-300 mb-1">Your Email</label>
+                      <input type="email" id="zEmail" required placeholder="alex@domain.com" class="w-full bg-obsidian-900 border border-obsidian-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-zeta-neon">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Subject</label>
+                    <input type="text" id="zSubject" required placeholder="Custom node cluster inquiry" class="w-full bg-obsidian-900 border border-obsidian-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-zeta-neon">
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Message</label>
+                    <textarea id="zMessage" rows="4" required placeholder="Tell us how we can help..." class="w-full bg-obsidian-900 border border-obsidian-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-zeta-neon resize-none"></textarea>
+                  </div>
+
+                  <button type="submit" id="zContactBtn" class="w-full py-3 rounded-xl font-bold text-xs sm:text-sm text-black bg-zeta-neon hover:bg-emerald-300 transition shadow-lg shadow-zeta-emerald/20">
+                    Send Message
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ================= PAGE 2: PRIVACY POLICY (#/privacy-policy) ================= -->
+    <div id="page-privacy" class="page-view hidden pt-28 pb-20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="mb-6 flex items-center justify-between">
+          <a href="#/" onclick="navigateRoute('#/')" class="inline-flex items-center gap-2 text-xs font-semibold text-zeta-neon hover:underline">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+          <span class="text-xs font-mono text-slate-500">Route: #/privacy-policy</span>
+        </div>
+
+        <div class="emerald-card p-6 sm:p-10 rounded-3xl border border-obsidian-700 shadow-2xl">
+          <div class="flex items-center gap-3 pb-5 border-b border-obsidian-800">
+            <div class="w-12 h-12 rounded-xl bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-xl flex-shrink-0 border border-zeta-emerald/20">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h1 class="text-xl sm:text-2xl font-extrabold text-white display-font">Privacy Policy</h1>
+              <p class="text-xs text-slate-400">Written in plain, straightforward English</p>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-6 text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">1. What information we collect</h2>
+              <p class="text-slate-400">
+                When you create an account or contact us, we collect standard details including your name, email address, and billing contact information. We only gather what is necessary to activate and maintain your servers.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">2. How your data is used</h2>
+              <p class="text-slate-400">
+                We use your information exclusively to provide cloud services, process invoices, and provide technical assistance. We never sell, rent, or trade your personal details with advertisers or external parties.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">3. Payment processing security</h2>
+              <p class="text-slate-400">
+                All payment transactions are handled through accredited, encrypted third-party payment gateways. ZetaHost never stores your full credit card number or CVV codes on our local servers.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">4. Contact regarding privacy</h2>
+              <p class="text-slate-400">
+                If you have questions regarding data privacy or would like to request account deletion, contact our privacy desk at <span class="font-mono text-zeta-neon">zetacloud.ops@gmail.com</span>.
+              </p>
+              <p class="text-slate-400 mt-2">
+                Address: 500 Terry Francois Blvd, Suite 350, San Francisco, CA 94158, United States.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-obsidian-800 flex justify-between items-center text-xs">
+            <a href="#/terms-and-conditions" onclick="navigateRoute('#/terms-and-conditions')" class="text-slate-400 hover:text-white">
+              Terms & Conditions &rarr;
+            </a>
+            <a href="#/" onclick="navigateRoute('#/')" class="px-4 py-2 rounded-xl text-black bg-zeta-neon hover:bg-emerald-300 font-bold transition">
+              Return to Main Page
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= PAGE 3: REFUND POLICY (#/refund-policy) ================= -->
+    <div id="page-refund" class="page-view hidden pt-28 pb-20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="mb-6 flex items-center justify-between">
+          <a href="#/" onclick="navigateRoute('#/')" class="inline-flex items-center gap-2 text-xs font-semibold text-zeta-neon hover:underline">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+          <span class="text-xs font-mono text-slate-500">Route: #/refund-policy</span>
+        </div>
+
+        <div class="emerald-card p-6 sm:p-10 rounded-3xl border border-obsidian-700 shadow-2xl">
+          <div class="flex items-center gap-3 pb-5 border-b border-obsidian-800">
+            <div class="w-12 h-12 rounded-xl bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-xl flex-shrink-0 border border-zeta-emerald/20">
+              <i class="fa-solid fa-rotate-left"></i>
+            </div>
+            <div>
+              <h1 class="text-xl sm:text-2xl font-extrabold text-white display-font">Refund Policy</h1>
+              <p class="text-xs text-slate-400">Simple 30-Day Money-Back Guarantee</p>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-6 text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">1. Full 30-Day Guarantee</h2>
+              <p class="text-slate-400">
+                We stand behind our hosting speed and reliability. If you are not satisfied with your hosting plan for any reason within the first 30 days of registration, we will issue a complete refund with zero hassle.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">2. Eligible services</h2>
+              <p class="text-slate-400">
+                The 30-day money-back guarantee applies to all standard recurring hosting services:
+              </p>
+              <ul class="list-disc pl-5 mt-1.5 space-y-1 text-slate-400">
+                <li>Static Edge CDN Hosting</li>
+                <li>High-Frequency Node VPS</li>
+                <li>Managed E-Commerce Cloud</li>
+                <li>Microservices Cloud Pods</li>
+                <li>Storage & Backup Vault</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">3. How to claim your refund</h2>
+              <p class="text-slate-400">
+                Simply write to our support desk at <span class="font-mono text-zeta-neon">zetacloud.ops@gmail.com</span> with your registered account email and plan details. Refunds are processed back to your original payment method in 1 to 3 business days.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-obsidian-800 flex justify-between items-center text-xs">
+            <a href="#/privacy-policy" onclick="navigateRoute('#/privacy-policy')" class="text-slate-400 hover:text-white">
+              &larr; Privacy Policy
+            </a>
+            <a href="#/" onclick="navigateRoute('#/')" class="px-4 py-2 rounded-xl text-black bg-zeta-neon hover:bg-emerald-300 font-bold transition">
+              Return to Main Page
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= PAGE 4: TERMS & CONDITIONS (#/terms-and-conditions) ================= -->
+    <div id="page-terms" class="page-view hidden pt-28 pb-20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="mb-6 flex items-center justify-between">
+          <a href="#/" onclick="navigateRoute('#/')" class="inline-flex items-center gap-2 text-xs font-semibold text-zeta-neon hover:underline">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+          <span class="text-xs font-mono text-slate-500">Route: #/terms-and-conditions</span>
+        </div>
+
+        <div class="emerald-card p-6 sm:p-10 rounded-3xl border border-obsidian-700 shadow-2xl">
+          <div class="flex items-center gap-3 pb-5 border-b border-obsidian-800">
+            <div class="w-12 h-12 rounded-xl bg-zeta-emerald/15 text-zeta-neon flex items-center justify-center text-xl flex-shrink-0 border border-zeta-emerald/20">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div>
+              <h1 class="text-xl sm:text-2xl font-extrabold text-white display-font">Terms and Conditions</h1>
+              <p class="text-xs text-slate-400">Fair Use & Service Agreement</p>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-6 text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">1. Overview</h2>
+              <p class="text-slate-400">
+                By purchasing and using hosting services provided by ZetaHost, you agree to these fair terms of service. You agree to use server resources lawfully and ethically.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">2. Prohibited activities</h2>
+              <p class="text-slate-400 mb-2">
+                To guarantee optimal uptime and fast response times for all customers, the following activities are strictly banned:
+              </p>
+              <ul class="list-disc pl-5 space-y-1 text-slate-400">
+                <li>Sending unsolicited bulk email (spam).</li>
+                <li>Hosting phishing websites, scam portals, or malicious software.</li>
+                <li>Conducting port scans, network floods, or unauthorized security exploits.</li>
+                <li>Hosting uncopyrighted material or illegal content.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">3. Cancellations & Renewals</h2>
+              <p class="text-slate-400">
+                Hosting subscriptions renew automatically based on your chosen billing cycle (monthly or annual). You can cancel your subscription at any time without fees or penalties directly through your client dashboard.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-sm font-bold text-zeta-neon mb-1.5 display-font">4. Contact Information</h2>
+              <p class="text-slate-400">
+                Questions regarding our terms can be sent to <span class="font-mono text-zeta-neon">zetacloud.ops@gmail.com</span>.
+              </p>
+              <p class="text-slate-400 mt-2">
+                ZetaHost Cloud &bull; 500 Terry Francois Blvd, Suite 350, San Francisco, CA 94158, United States.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-obsidian-800 flex justify-between items-center text-xs">
+            <a href="#/refund-policy" onclick="navigateRoute('#/refund-policy')" class="text-slate-400 hover:text-white">
+              &larr; Refund Policy
+            </a>
+            <a href="#/" onclick="navigateRoute('#/')" class="px-4 py-2 rounded-xl text-black bg-zeta-neon hover:bg-emerald-300 font-bold transition">
+              Return to Main Page
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-obsidian-800 bg-obsidian-950 py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        
+        <!-- Brand & Address/Email Info -->
+        <div class="md:col-span-2 space-y-3.5">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-lg bg-obsidian-900 border border-zeta-neon/30 flex items-center justify-center p-1.5">
+              <svg class="w-full h-full" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 14h22v5L19 30h16v5H13v-5l16-11H13z" fill="#10b981" stroke="#34d399" stroke-width="1.5" stroke-linejoin="round" />
+                <circle cx="35" cy="14" r="3" fill="#34d399" />
+              </svg>
+            </div>
+            <span class="text-lg font-bold text-white display-font">
+              Zeta<span class="text-zeta-neon">Host</span>
+            </span>
+          </div>
+
+          <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
+            High-performance web hosting, high-frequency VPS nodes, and cloud containers. Fast SSD NVMe drives and 24/7 uptime guarantee.
+          </p>
+
+          <div class="text-xs text-slate-400 space-y-1.5 pt-1">
+            <p><i class="fa-solid fa-envelope text-zeta-neon mr-2"></i> <span class="font-mono text-slate-300">zetacloud.ops@gmail.com</span></p>
+            <p><i class="fa-solid fa-location-dot text-zeta-neon mr-2"></i> 500 Terry Francois Blvd, Suite 350, San Francisco, CA 94158, United States</p>
+          </div>
+        </div>
+
+        <!-- Hosting Services Links -->
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3 display-font">Cloud Solutions</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="#/services" onclick="handleNavClick(event, 'services')" class="hover:text-zeta-neon">Static Edge Hosting</a></li>
+            <li><a href="#/services" onclick="handleNavClick(event, 'services')" class="hover:text-zeta-neon">High-Frequency VPS</a></li>
+            <li><a href="#/services" onclick="handleNavClick(event, 'services')" class="hover:text-zeta-neon">GPU AI Inference</a></li>
+            <li><a href="#/services" onclick="handleNavClick(event, 'services')" class="hover:text-zeta-neon">E-Commerce Cloud</a></li>
+            <li><a href="#/services" onclick="handleNavClick(event, 'services')" class="hover:text-zeta-neon">Container Pods</a></li>
+            <li><a href="#/services" onclick="handleNavClick(event, 'services')" class="hover:text-zeta-neon">Storage & Backup Vault</a></li>
+          </ul>
+        </div>
+
+        <!-- Separate URL Legal Pages -->
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3 display-font">Legal Pages</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li>
+              <a href="#/privacy-policy" onclick="navigateRoute('#/privacy-policy')" class="hover:text-zeta-neon flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-[10px] text-zeta-neon"></i>
+                <span>Privacy Policy</span>
+              </a>
+            </li>
+            <li>
+              <a href="#/refund-policy" onclick="navigateRoute('#/refund-policy')" class="hover:text-zeta-neon flex items-center gap-1.5">
+                <i class="fa-solid fa-rotate-left text-[10px] text-zeta-neon"></i>
+                <span>Refund Policy</span>
+              </a>
+            </li>
+            <li>
+              <a href="#/terms-and-conditions" onclick="navigateRoute('#/terms-and-conditions')" class="hover:text-zeta-neon flex items-center gap-1.5">
+                <i class="fa-solid fa-scale-balanced text-[10px] text-zeta-neon"></i>
+                <span>Terms & Conditions</span>
+              </a>
+            </li>
+            <li class="pt-2">
+              <span class="text-[11px] text-zeta-neon font-semibold bg-zeta-emerald/10 px-2 py-0.5 rounded border border-zeta-emerald/20">
+                All Plans 60% Cheaper
+              </span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="pt-6 border-t border-obsidian-900 text-center text-xs text-slate-500">
+        &copy; 2026 ZetaHost Cloud. All rights reserved. 500 Terry Francois Blvd, Suite 350, San Francisco, CA 94158, United States.
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Contact Form Success Message Modal -->
+  <div id="contactSuccessModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+    <div class="emerald-card max-w-md w-full rounded-2xl p-6 sm:p-7 border border-zeta-neon/40 shadow-2xl relative">
+      <button onclick="closeModal('contactSuccessModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+
+      <div class="w-12 h-12 mx-auto rounded-xl bg-zeta-emerald/20 text-zeta-neon flex items-center justify-center text-xl mb-3 border border-zeta-neon/30">
+        <i class="fa-solid fa-check"></i>
+      </div>
+
+      <div class="text-center mb-4">
+        <h3 class="text-lg font-bold text-white display-font">Message Sent Successfully!</h3>
+        <p class="text-xs text-slate-400 mt-1">Dispatched to <span class="font-mono text-zeta-neon font-semibold">zetacloud.ops@gmail.com</span></p>
+      </div>
+
+      <div class="bg-obsidian-950 p-4 rounded-xl border border-obsidian-800 text-xs space-y-2 text-slate-300">
+        <div class="flex justify-between border-b border-obsidian-800 pb-1.5">
+          <span class="text-slate-400">Reference:</span>
+          <span class="font-mono text-zeta-neon font-bold" id="confirmTicket">#ZH-84192</span>
+        </div>
+        <div class="flex justify-between border-b border-obsidian-800 pb-1.5">
+          <span class="text-slate-400">Name:</span>
+          <span class="font-medium text-white" id="confirmName">-</span>
+        </div>
+        <div class="flex justify-between border-b border-obsidian-800 pb-1.5">
+          <span class="text-slate-400">Email:</span>
+          <span class="font-medium text-white" id="confirmEmail">-</span>
+        </div>
+        <div class="flex justify-between border-b border-obsidian-800 pb-1.5">
+          <span class="text-slate-400">Subject:</span>
+          <span class="font-medium text-white" id="confirmSubject">-</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Delivered to:</span>
+          <span class="font-mono text-zeta-neon font-bold">zetacloud.ops@gmail.com</span>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <button onclick="closeModal('contactSuccessModal')" class="w-full py-2.5 rounded-xl text-xs font-bold text-black bg-zeta-neon hover:bg-emerald-300 transition">
+          OK, Close Window
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan Provisioning Modal -->
+  <div id="orderModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+    <div class="emerald-card max-w-md w-full rounded-2xl p-6 border border-zeta-neon/30 shadow-2xl relative">
+      <button onclick="closeModal('orderModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-zeta-emerald/20 text-zeta-neon flex items-center justify-center text-lg border border-zeta-neon/30">
+          <i class="fa-solid fa-server"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white display-font" id="orderPlanName">High-Frequency Node VPS</h3>
+          <p class="text-xs text-zeta-neon font-semibold">60% Discount Applied</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-medium mb-1">Server Hostname or Domain</label>
+          <input type="text" id="orderHostname" placeholder="app-node1.mysite.com" class="w-full bg-obsidian-950 border border-obsidian-750 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-zeta-neon">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-medium mb-1">Account Contact Email</label>
+          <input type="email" id="orderEmail" required placeholder="you@domain.com" class="w-full bg-obsidian-950 border border-obsidian-750 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-zeta-neon">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-medium mb-1">Primary Operating System</label>
+          <select class="w-full bg-obsidian-950 border border-obsidian-750 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-zeta-neon">
+            <option>Ubuntu 24.04 LTS (Recommended)</option>
+            <option>Debian 12 Bookworm</option>
+            <option>AlmaLinux 9 (RHEL Compatible)</option>
+            <option>Docker / Container OS</option>
+          </select>
+        </div>
+
+        <div class="p-3 bg-obsidian-950 rounded-xl border border-obsidian-800 flex justify-between items-center">
+          <span class="text-slate-400">Total Price:</span>
+          <span class="text-base font-bold text-zeta-neon font-mono" id="orderPlanPrice">$3.80 / mo</span>
+        </div>
+      </div>
+
+      <div class="mt-5 flex gap-2">
+        <button onclick="closeModal('orderModal')" class="w-1/3 py-2.5 text-xs font-semibold text-slate-300 border border-obsidian-750 rounded-xl hover:bg-obsidian-900">Cancel</button>
+        <button onclick="completeZetaOrder()" class="w-2/3 py-2.5 text-xs font-bold text-black bg-zeta-neon hover:bg-emerald-300 rounded-xl shadow-md shadow-zeta-emerald/20">Provision Server</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Portal Login Modal -->
+  <div id="portalModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+    <div class="emerald-card max-w-sm w-full rounded-2xl p-6 border border-zeta-neon/30 shadow-2xl relative">
+      <button onclick="closeModal('portalModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+
+      <div class="text-center mb-5">
+        <div class="w-10 h-10 mx-auto rounded-xl bg-zeta-emerald/20 text-zeta-neon flex items-center justify-center text-lg mb-2 border border-zeta-neon/30">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 class="text-base font-bold text-white display-font">Client Dashboard Login</h3>
+        <p class="text-xs text-slate-400">Manage your servers and cloud pods</p>
+      </div>
+
+      <form onsubmit="handleZetaLogin(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-medium mb-1">Email Address</label>
+          <input type="email" required placeholder="you@domain.com" class="w-full bg-obsidian-950 border border-obsidian-750 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-zeta-neon">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-medium mb-1">Password</label>
+          <input type="password" required placeholder="••••••••" class="w-full bg-obsidian-950 border border-obsidian-750 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-zeta-neon">
+        </div>
+        <button type="submit" class="w-full py-2.5 font-bold text-black bg-zeta-neon hover:bg-emerald-300 rounded-xl transition mt-2 shadow-md">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5 px-4 py-3 rounded-xl emerald-card border border-zeta-neon/30 shadow-2xl text-xs font-semibold text-white">
+    <i class="fa-solid fa-circle-check text-zeta-neon" id="toastIcon"></i>
+    <span id="toastMsg">Notification</span>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       1. MULTI-PAGE CLIENT ROUTER (4 SEPARATE PAGES)
+       Routes:
+         1. '#/' or '#/home'            -> Main Homepage (Split Hero, About Us, Services, FAQ, Contact)
+         2. '#/privacy-policy'          -> Dedicated Privacy Policy Page
+         3. '#/refund-policy'           -> Dedicated Refund Policy Page
+         4. '#/terms-and-conditions'    -> Dedicated Terms & Conditions Page
+       ========================================================================== */
+
+    const routes = {
+      '': 'page-home',
+      '#/': 'page-home',
+      '#/home': 'page-home',
+      '#/about': 'page-home',
+      '#/services': 'page-home',
+      '#/faq': 'page-home',
+      '#/contact': 'page-home',
+      '#/privacy-policy': 'page-privacy',
+      '#/refund-policy': 'page-refund',
+      '#/terms-and-conditions': 'page-terms'
+    };
+
+    function renderRoute() {
+      const hash = window.location.hash || '#/';
+      const cleanHash = hash.split('?')[0];
+
+      // Hide all 4 pages
+      document.querySelectorAll('.page-view').forEach(view => {
+        view.classList.add('hidden');
+      });
+
+      const targetId = routes[cleanHash] || 'page-home';
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        targetElement.classList.remove('hidden');
+      }
+
+      // Handle scrolling on the main page
+      if (targetId === 'page-home') {
+        if (cleanHash === '#/about') scrollToSection('about');
+        else if (cleanHash === '#/services') scrollToSection('services');
+        else if (cleanHash === '#/faq') scrollToSection('faq');
+        else if (cleanHash === '#/contact') scrollToSection('contact');
+        else if (cleanHash === '#/home' || cleanHash === '#/') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
+        // Legal pages always open cleanly at the very top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function navigateRoute(routeHash) {
+      if (window.location.hash === routeHash) {
+        renderRoute();
+      } else {
+        window.location.hash = routeHash;
+      }
+    }
+
+    function handleNavClick(e, sectionId) {
+      if (e) e.preventDefault();
+      const current = window.location.hash || '#/';
+      const isLegal = current.includes('privacy') || current.includes('refund') || current.includes('terms');
+
+      if (isLegal) {
+        window.location.hash = `#/${sectionId}`;
+      } else {
+        window.location.hash = `#/${sectionId}`;
+        scrollToSection(sectionId);
+      }
+    }
+
+    function scrollToSection(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+      }
+    }
+
+    window.addEventListener('hashchange', renderRoute);
+    window.addEventListener('DOMContentLoaded', () => {
+      renderRoute();
+      initTelemetryJitter();
+    });
+
+    /* ==========================================================================
+       2. MOBILE MENU HANDLERS
+       ========================================================================== */
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobileDrawer');
+      const icon = document.getElementById('mobileMenuIcon');
+      drawer.classList.toggle('hidden');
+      icon.className = drawer.classList.contains('hidden') ? 'fa-solid fa-bars text-lg' : 'fa-solid fa-xmark text-lg';
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobileDrawer');
+      const icon = document.getElementById('mobileMenuIcon');
+      drawer.classList.add('hidden');
+      icon.className = 'fa-solid fa-bars text-lg';
+    }
+
+    /* ==========================================================================
+       3. INTERACTIVE HERO RESOURCE SLIDER
+       ========================================================================== */
+    const scaleProfiles = {
+      1: { text: "1 vCPU / 2 GB RAM / 40 GB NVMe", load: "9.2%", width: "12%" },
+      2: { text: "2 vCPU / 4 GB RAM / 80 GB NVMe", load: "19.4%", width: "22%" },
+      3: { text: "4 vCPU / 8 GB RAM / 160 GB NVMe", load: "34.1%", width: "42%" },
+      4: { text: "8 vCPU / 16 GB RAM / 320 GB NVMe", load: "58.7%", width: "70%" }
+    };
+
+    function updateResourceDemo(val) {
+      const profile = scaleProfiles[val] || scaleProfiles[2];
+      document.getElementById('sliderValLabel').textContent = profile.text;
+      document.getElementById('loadMetric').textContent = profile.load;
+    }
+
+    function orderCustomSpec() {
+      const spec = document.getElementById('sliderValLabel').textContent;
+      orderZetaPlan('Custom Spec Node (' + spec + ')', 4.50);
+    }
+
+    function initTelemetryJitter() {
+      setInterval(() => {
+        const metric = document.getElementById('loadMetric');
+        if (metric) {
+          const base = parseFloat(metric.textContent);
+          const jitter = (Math.random() * 0.8 - 0.4).toFixed(1);
+          metric.textContent = `${Math.max(5, (base + parseFloat(jitter))).toFixed(1)}%`;
+        }
+      }, 3500);
+    }
+
+    /* ==========================================================================
+       4. BILLING TOGGLE (60% OFF PRICING - MONTHLY VS YEARLY)
+       ========================================================================== */
+    function setZetaBilling(cycle) {
+      const moBtn = document.getElementById('billingMonthly');
+      const yrBtn = document.getElementById('billingAnnual');
+      const costs = document.querySelectorAll('.zeta-cost');
+      const hints = document.querySelectorAll('.zeta-hint');
+
+      if (cycle === 'annual') {
+        yrBtn.className = 'px-5 py-2 rounded-xl text-xs font-bold bg-zeta-neon text-black transition shadow flex items-center gap-2';
+        moBtn.className = 'px-5 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition';
+
+        costs.forEach(c => {
+          c.textContent = '$' + c.getAttribute('data-yr');
+        });
+        hints.forEach(h => {
+          h.textContent = 'Billed yearly (extra 20% discount applied)';
+        });
+      } else {
+        moBtn.className = 'px-5 py-2 rounded-xl text-xs font-bold bg-zeta-neon text-black transition shadow';
+        yrBtn.className = 'px-5 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition flex items-center gap-2';
+
+        costs.forEach(c => {
+          c.textContent = '$' + c.getAttribute('data-mo');
+        });
+        hints.forEach(h => {
+          h.textContent = 'Billed every month';
+        });
+      }
+    }
+
+    /* ==========================================================================
+       5. FAQ ACCORDION
+       ========================================================================== */
+    function toggleZetaFaq(btn) {
+      const content = btn.nextElementSibling;
+      const icon = btn.querySelector('i');
+      const isHidden = content.classList.contains('hidden');
+
+      document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+      document.querySelectorAll('#faqAccordion button i').forEach(i => i.classList.remove('rotate-180'));
+
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    /* ==========================================================================
+       6. CONTACT FORM DISPATCH TO zetacloud.ops@gmail.com
+       ========================================================================== */
+    function handleZetaContactSubmit(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('zName').value.trim();
+      const email = document.getElementById('zEmail').value.trim();
+      const subject = document.getElementById('zSubject').value.trim();
+      const btn = document.getElementById('zContactBtn');
+
+      btn.disabled = true;
+      btn.textContent = 'Sending to zetacloud.ops@gmail.com...';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+
+        const ticketNum = '#ZH-' + Math.floor(10000 + Math.random() * 90000);
+        document.getElementById('confirmTicket').textContent = ticketNum;
+        document.getElementById('confirmName').textContent = name;
+        document.getElementById('confirmEmail').textContent = email;
+        document.getElementById('confirmSubject').textContent = subject;
+
+        document.getElementById('zetaContactForm').reset();
+
+        openModal('contactSuccessModal');
+        showToast('Message sent to zetacloud.ops@gmail.com! Ticket ' + ticketNum);
+      }, 550);
+    }
+
+    /* ==========================================================================
+       7. MODALS & TOAST NOTIFICATION HELPERS
+       ========================================================================== */
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function orderZetaPlan(name, price) {
+      document.getElementById('orderPlanName').textContent = name;
+      document.getElementById('orderPlanPrice').textContent = typeof price === 'number' ? `$${price.toFixed(2)} / mo` : price;
+      openModal('orderModal');
+    }
+
+    function completeZetaOrder() {
+      const email = document.getElementById('orderEmail').value;
+      if (!email || !email.includes('@')) {
+        showToast('Please provide a valid email address.');
+        return;
+      }
+      closeModal('orderModal');
+      showToast('Order received! Setup details sent to ' + email);
+      document.getElementById('orderEmail').value = '';
+    }
+
+    function openPortalModal() {
+      openModal('portalModal');
+    }
+
+    function handleZetaLogin(e) {
+      e.preventDefault();
+      closeModal('portalModal');
+      showToast('Logged in successfully! Redirecting to client area...');
+    }
+
+    let toastTimer;
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toastMsg');
+      clearTimeout(toastTimer);
+      msg.textContent = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
